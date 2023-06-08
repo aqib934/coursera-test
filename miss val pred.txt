@@ -1,0 +1,27 @@
+import pandas as pd
+from sklearn import linear_model
+from sklearn.preprocessing import PolynomialFeatures
+df = pd.read_csv('superman.csv')
+df
+train_data = df.dropna(subset=['Salary '])
+train_data
+test_data = df[df['Salary '].isna()]
+test_data
+x = train_data['Level'].values.reshape(-1,1)
+x
+y = train_data['Salary '].values
+y
+poly = PolynomialFeatures(degree=2)
+poly
+xPoly = poly.fit_transform(x)
+xPoly
+model = linear_model.LinearRegression()
+model.fit(xPoly,y)
+x_test = test_data['Level'].values.reshape(-1,1)
+x_test
+xPolyTest = poly.fit_transform(x_test)
+xPolyTest
+y_pred = model.predict(xPolyTest)
+y_pred
+df.loc[df['Salary '].isna(),'Salary '] = y_pred
+df
